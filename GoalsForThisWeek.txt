@@ -1,0 +1,15 @@
+Goals For Next Monday:
+|- Minor Goals (Can be pushed)
+   |- Segment/whole image preprocessing
+      |- Filters
+      	 |- Sobel operator
+	 |- Grad-CAM?
+	 |- Divergence
+	 |- Curl
+      |- Batches
+      |- Data augmentation
+      |- Class balancing
+|- Major Goals
+   |- Set up generator/pipeline to feed data into Claudia's model
+   |- Set up pipeline for output of Claudia's model into our evaluation
+

@@ -1,0 +1,169 @@
+Main Driver Function:
+
+    generateFeatures: Takes in a list of images and corresponding list of annotations
+    %%%%% - Comments
+	each integer in the top level dictionary represents a new files
+
+	header is a dictionary of following format:
+	{
+	  'bname' : str('original file name'),
+	  'MicronsPerPixel' : float,
+	  'width' : int,
+	  'height' : int,
+	  'tissue' : list of tissue types ['breast'] for our application
+	}
+
+	frame_size is an int
+	x_coordinates is a list of integers
+	y_coordinates is a list of integers
+	features is a list of corresponding features based on the model type
+	labels is a list of labels
+	return:
+	    dict{
+	         0 : {
+		       'header':header,
+		       'frame_size':frame_size,
+	               'x_coordinates':x_coordinates,
+		       'y_coordinates':y_coordindates,
+		       'labels':label,
+		       'features':features,
+		     }
+			 
+	         1 : {
+		       'header':header,
+		       'frame_size':frame_size,
+	               'x_coordinates':x_coordinates,
+		       'y_coordinates':y_coordindates,
+		       'labels':label,
+		       'features':features,
+		     }
+		 ...
+	         N : {
+		       'header':header,
+		       'frame_size':frame_size,
+	               'x_coordinates':x_coordinates,
+		       'y_coordinates':y_coordindates,
+		       'labels':label,
+		       'features':features,
+		     }
+		}
+    %%%%% - Pseudocode
+	
+        For every file & image pair:
+
+	    Filter the whole image
+
+	    Segment Image
+
+	    Filter Segments
+
+	    Extract Features
+
+    trainModel: takes in the output from generateFeatures and outputs a model
+
+    generateFrameDecisions: takes in the output from generateFeatures and the output from a model
+    %%%%% - Pseudocode
+        For every file in the dictionary:
+
+	    add two keys to dictionary: prediction and confidence
+
+   	    For every frame in file:
+	    
+	    	append the prediction and confidence to each corresponding list
+    %%%%%
+
+    generateRegionDecisions: takes in the output from generateFrameDecisions ( I use the term output loosely because technicallly its the mutable output from generateFeatures )
+    %%%%% - Comments
+    	each integer key below is relating to an index for a single patch
+	region_id is an integer that is just the index + 1
+	text is a string representing a label 'bckg', 'nneo', ..., 'dcis'
+	coordinates are a list of lists of x,y,z coordinates - Ex. [[x1,y1,z2],[x2,y2,z2],...,[xN,yN,zN]]
+	confidence is a float representing confidence
+	tissue type is a string containing the type of tissue - Ex. 'breast'
+	geometric properties is a dictionary of format: We can fill in zeroes for now
+	{
+	  'Length':float,
+	  'Area':float,
+	  'LengthMicrons':float,
+	  'AreaMicrons':float,
+	}
+
+        graph{
+	      0 : {
+		    'region_id':1,
+		    'text':text,
+		    'coordinates':coordinates,
+		    'confidence':confidence,
+		    'tissue_type':tissue_type,
+		    'geometric_properties':geometric_properties,
+		  }
+		  
+	      1 : {
+		    'region_id':2,
+		    'text':text,
+		    'coordinates':coordinates,
+		    'confidence':confidence,
+		    'tissue_type':tissue_type,
+		    'geometric_properties':geometric_properties,
+		  }		    
+	      ...
+	      
+	      2 : {
+		    'region_id':3,
+		    'text':text,
+		    'coordinates':coordinates,
+		    'confidence':confidence,
+		    'tissue_type':tissue_type,
+		    'geometric_properties':geometric_properties,
+		  }
+	     }
+     %%%%% - Pseudocode
+        For every file in the dictionary:
+
+            Generate the patch by combining frames
+
+	    Append the patch by creating the graph object
+
+     At this point the dictionary should look like:
+            dict{
+	         0 : {
+		       'header':header,
+		       'frame_size':frame_size,
+	               'x_coordinates':x_coordinates,
+		       'y_coordinates':y_coordindates,
+		       'labels':label,
+		       'features':features,
+		       'predictions':predictions,
+		       'confidence':confidence,
+		       'graph':graph,
+		     }
+			 
+	         1 : {
+		       'header':header,
+		       'frame_size':frame_size,
+	               'x_coordinates':x_coordinates,
+		       'y_coordinates':y_coordindates,
+		       'labels':label,
+		       'features':features,
+		       'predictions':predictions,
+		       'confidence':confidence,
+		       'graph':graph,
+		     }
+		 ...
+	         N : {
+		       'header':header,
+		       'frame_size':frame_size,
+	               'x_coordinates':x_coordinates,
+		       'y_coordinates':y_coordindates,
+		       'labels':label,
+		       'features':features,
+		       'predictions':predictions,
+		       'confidence':confidence,
+		       'graph':graph,
+		     }
+		}
+    writeRegionPredictions: takes in the output from generateRegionDecisions ( I use the term output loosely because technicallly its the mutable output from generateFeatures )
+
+        For every file in the dictionary:
+
+            Use the nedc_dpath_ann_tools to write an annotation file with the header and graph

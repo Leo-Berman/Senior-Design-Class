@@ -1,0 +1,53 @@
+Slideshow people:
+
+1->4 Leo (Replace images on 4)
+5->7 Yuan
+8->12 Leo
+13->16 Yuan
+17->20 Albert
+21 Leo (Setting up the remainder of the pipeline)
+22 Albert (Setting up the CNN & Filters)
+
+Parser that parses frame decisions - Yuan
+
+LABEL,FRAMESIZE,TOPLEFTXCOORDINATE,TOPLEFTYCOORDINATE
+
+Output:
+	Dataframe with columns
+	Labels, Framesize, TopleftXCoordinate, TopLeftYCoordinate
+
+Program that takes aforementioned dataframe and converts to numpy array of 0-1 (0 is unlabelled and .1-1 are labelled) where each index is equivalent to 1 frame size - Yuan
+
+0.0 - Unlabelled
+0.1 - Bckg
+0.2 - Norm
+0.3 - Null
+0.4 - Artf
+0.5 - Nneo
+0.6 - Infl
+0.7 - Susp
+0.8 - Ndic
+0.9 - Dcis
+
+Output:
+
+0.0 0.0 0.0 0.0 0.0 0.0
+0.0 0.0 0.0 2.0 2.0 0.0
+0.0 0.0 0.0 2.0 0.0 2.0
+0.0 0.0 0.0 2.0 2.0 0.0
+0.0 0.0 0.0 0.0 0.0 0.0
+
+
+Implement flood-fill to output malignant vs non malignant and list of coordinates - Albert
+
+Output:
+
+0.0 0.0 0.0 0.0 0.0 0.0
+0.0 0.0 0.0 2.0 2.0 0.0
+0.0 0.0 0.0 2.0 2.0 2.0
+0.0 0.0 0.0 2.0 2.0 0.0
+0.0 0.0 0.0 0.0 0.0 0.0
+
+Program that converts back from numpy array to pixel coordinate system and writes the annotations in the xml format - Leo
+
+Clean up code - Leo
